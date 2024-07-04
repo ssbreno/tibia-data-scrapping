@@ -13,9 +13,9 @@ COPY . ./
 RUN npx prisma generate
 COPY prisma ./prisma/
 
-RUN npm run build
+RUN pnpm run build
 
-RUN npm prune --omit=dev
+RUN pnpm prune --prod
 
 FROM node:20
 
