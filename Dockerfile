@@ -14,8 +14,6 @@ RUN npx prisma generate
 
 COPY prisma ./prisma/
 
-RUN npx prisma migrate deploy
-
 RUN pnpm run build
 
 RUN pnpm prune --prod
@@ -32,4 +30,4 @@ COPY --from=builder /app/package*.json /app/
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/node_modules /app/node_modules
 
-CMD node dist/src/main
+CMD ["npm", "start:prod"]
