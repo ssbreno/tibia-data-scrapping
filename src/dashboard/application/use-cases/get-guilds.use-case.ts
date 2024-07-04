@@ -25,7 +25,7 @@ export class GetGuildsUseCase {
 
       const grouped = members.reduce((acc, member) => {
         const vocationGroup =
-          member.level < 200
+          member.level < 300
             ? 'MAKER'
             : vocationMap[member.vocation] || member.vocation;
         if (!acc[vocationGroup]) {

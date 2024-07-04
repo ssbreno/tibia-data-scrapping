@@ -10,9 +10,12 @@ RUN npm install -g pnpm && pnpm install
 
 COPY . ./
 
-RUN pnpm run build
+RUN npx prisma generate
+COPY prisma ./prisma/
 
-RUN pnpm prune --prod
+RUN npm run build
+
+RUN npm prune --prod
 
 FROM node:20
 

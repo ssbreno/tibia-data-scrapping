@@ -1,26 +1,25 @@
 version: '3.8'
 services:
-  api:
-    container_name: api
+  tornabra-api:
+    container_name: tornabra-api
     build:
       context: .
       dockerfile: Dockerfile
     working_dir: /app
     volumes:
       - ./:/app
-    command: sh -c "pnpm run start"
     depends_on:
-      - database-db
+      - tornabra-db
     networks:
       - database-network
 
-  database-db:
+  tornabra-db:
     image: 'bitnami/postgresql'
-    container_name: database-db
+    container_name: tornabra-db
     environment:
-      - POSTGRESQL_USERNAME=docker
-      - POSTGRESQL_PASSWORD=docker
-      - POSTGRESQL_DATABASE=database
+      - POSTGRESQL_USERNAME=tornabra
+      - POSTGRESQL_PASSWORD=tornabra
+      - POSTGRESQL_DATABASE=tornabradb
     ports:
       - 5432:5432
     volumes:
