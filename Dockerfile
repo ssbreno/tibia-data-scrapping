@@ -30,4 +30,4 @@ COPY --from=builder /app/package*.json /app/
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/node_modules /app/node_modules
 
-CMD ["npm", "start:prod"]
+CMD ["pnpm", "start:prod"]
