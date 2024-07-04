@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingModule } from './common';
 import { LoggingInterceptor } from './common/logging/logging.interceptor';
+import { DashboardModule } from './dashboard/dashboard.module';
 import { HealthModule } from './health/health.module';
 
 @Module({
@@ -10,6 +11,7 @@ import { HealthModule } from './health/health.module';
     ConfigModule.forRoot({ isGlobal: true }),
     LoggingModule,
     HealthModule,
+    DashboardModule,
   ],
   providers: [
     {
