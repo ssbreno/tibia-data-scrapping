@@ -42,10 +42,14 @@ export class GetGuildsUseCase {
       };
     });
 
+    const onlineMembers = updatedMembers.filter(
+      (member) => member.status === 'online',
+    );
+
     const newResponse = {
       guild: {
         total_online: guildStatus.guild.players_online,
-        members: updatedMembers,
+        members: onlineMembers,
       },
     };
 

@@ -1,12 +1,11 @@
-import { IsEnum, IsInt, IsString } from 'class-validator';
-
-export enum CharacterType {
-  MAKER = 'MAKER',
-  BOMBA = 'BOMBA',
-  MAIN = 'MAIN',
-}
+import { CharacterType } from '@prisma/client';
+import { IsEnum, IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CharacterListDTO {
+  @IsOptional()
+  @IsUUID()
+  id: string;
+
   @IsString()
   name: string;
 
@@ -15,9 +14,6 @@ export class CharacterListDTO {
 
   @IsInt()
   level: number;
-
-  @IsString()
-  status: string;
 
   @IsEnum(CharacterType)
   type: CharacterType;
