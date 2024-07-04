@@ -4,6 +4,9 @@ import { ApiResponse } from '../../domain/interfaces/guilds.interface';
 
 @Injectable()
 export class GetGuildsUseCase {
+  private membersTimers: { [name: string]: { timer: number; status: string } } =
+    {};
+
   constructor(
     private readonly getGuildsTibiaDataUseCase: GetGuildsTibiaDataUseCase,
   ) {}
@@ -11,60 +14,52 @@ export class GetGuildsUseCase {
   async execute(): Promise<any> {
     const guildStatus: ApiResponse = await this.getGuilds();
 
-    const onlineMembers = guildStatus.guild.members.filter(
-      (member) => member.status === 'online',
-    );
+    const updatedMembers = guildStatus.guild.members.map((member) => {
+      const existingMember = this.membersTimers[member.name];
 
-    const groupByVocation = (members) => {
-      const vocationMap = {
-        'Elite Knight': 'Knight',
-        'Elder Druid': 'Druid',
-        'Royal Paladin': 'Paladin',
-        'Master Sorcerer': 'Sorcerer',
-      };
-
-      const grouped = members.reduce((acc, member) => {
-        const vocationGroup =
-          member.level < 300
-            ? 'MAKER'
-            : vocationMap[member.vocation] || member.vocation;
-        if (!acc[vocationGroup]) {
-          acc[vocationGroup] = [];
+      if (existingMember) {
+        if (member.status === 'online') {
+          if (existingMember.status === 'online') {
+            this.membersTimers[member.name].timer += 1;
+          } else {
+            this.membersTimers[member.name].timer = 1;
+          }
+        } else {
+          this.membersTimers[member.name].timer = 0;
         }
-        acc[vocationGroup].push(member);
-        return acc;
-      }, {});
-
-      for (const key in grouped) {
-        grouped[key].sort((a, b) => b.level - a.level);
+      } else {
+        this.membersTimers[member.name] = {
+          timer: member.status === 'online' ? 1 : 0,
+          status: member.status,
+        };
       }
 
-      const result = {};
-      Object.keys(grouped)
-        .sort((a, b) => {
-          if (a === 'MAKER') return 1;
-          if (b === 'MAKER') return -1;
-          return 0;
-        })
-        .forEach((key) => {
-          result[key] = grouped[key];
-        });
+      this.membersTimers[member.name].status = member.status;
 
-      return result;
-    };
-
-    const groupedOnlineMembers = groupByVocation(onlineMembers);
+      return {
+        ...member,
+        onlineTimer: this.formatTime(this.membersTimers[member.name].timer),
+      };
+    });
 
     const newResponse = {
       guild: {
         total_online: guildStatus.guild.players_online,
-        members: groupedOnlineMembers,
+        members: updatedMembers,
       },
     };
+
     return newResponse;
   }
 
   async getGuilds(): Promise<ApiResponse> {
     return this.getGuildsTibiaDataUseCase.getGuilds();
+  }
+
+  private formatTime(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   }
 }

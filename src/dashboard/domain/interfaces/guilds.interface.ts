@@ -32,6 +32,7 @@ export interface Member {
   level: number;
   joined: string;
   status: string;
+  onlineTimer?: number;
 }
 
 export interface ApiResponse {
