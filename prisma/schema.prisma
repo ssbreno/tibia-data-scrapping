@@ -23,3 +23,19 @@ model Respawn {
   @@index([name])
   @@index([character])
 }
+
+model CharacterList {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String
+  vocation   String
+  level      Int
+  type       CharacterType
+
+  @@index([name])
+}
+
+enum CharacterType {
+  MAKER
+  BOMBA
+  MAIN
+}
