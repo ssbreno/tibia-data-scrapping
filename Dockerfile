@@ -15,7 +15,7 @@ COPY prisma ./prisma/
 
 RUN npm run build
 
-RUN npm prune --prod
+RUN npm prune --omit=dev
 
 FROM node:20
 
