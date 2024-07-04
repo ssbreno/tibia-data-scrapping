@@ -26,7 +26,6 @@
     "doc:serve": "pnpm run doc && npx @compodoc/compodoc -s",
     "precommit": "lint-staged && pnpm run lint",
     "prepush": "pnpm run test",
-    "prepare": "is-ci || husky install",
     "commit": "cz"
   },
   "dependencies": {
