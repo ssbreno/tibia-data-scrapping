@@ -8,9 +8,16 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { FRONT_END_URL } from '../../../common/constants';
 import { GetGuildsUseCase } from '../../application/use-cases/get-guilds.use-case';
 
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: {
+    origin: FRONT_END_URL,
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+})
 export class GuildsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {

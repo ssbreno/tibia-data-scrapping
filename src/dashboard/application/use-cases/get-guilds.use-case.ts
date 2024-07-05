@@ -46,6 +46,24 @@ export class GetGuildsUseCase {
       (member) => member.status === 'online',
     );
 
+    // Ordenação conforme a vocação
+    const vocationOrder = [
+      'Elite Knight',
+      'Knight',
+      'Royal Paladin',
+      'Paladin',
+      'Master Sorcerer',
+      'Sorcerer',
+      'Elder Druid',
+      'Druid',
+    ];
+
+    onlineMembers.sort((a, b) => {
+      const aOrder = vocationOrder.indexOf(a.vocation);
+      const bOrder = vocationOrder.indexOf(b.vocation);
+      return aOrder - bOrder;
+    });
+
     const newResponse = {
       guild: {
         total_online: guildStatus.guild.players_online,

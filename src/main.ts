@@ -16,6 +16,7 @@ import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter, WinstonLogger } from './common';
 import {
+  FRONT_END_URL,
   PROJECT_DESCRIPTION,
   PROJECT_NAME,
   PROJECT_VERSION,
@@ -72,7 +73,7 @@ async function bootstrap() {
 
   app.useLogger(app.get(WinstonLogger));
   app.enableCors({
-    origin: '*',
+    origin: FRONT_END_URL,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
