@@ -71,7 +71,11 @@ async function bootstrap() {
   );
 
   app.useLogger(app.get(WinstonLogger));
-  app.enableCors();
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: process.env.API_VERSION || DEFAULT_API_VERSION,
