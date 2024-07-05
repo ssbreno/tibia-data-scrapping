@@ -9,7 +9,7 @@ import { GetGuildsUseCase } from '../use-cases/get-guilds.use-case';
 import { UpdateCharacterListUseCase } from '../use-cases/update-character-list.use-case';
 import { UpdateRespawnUseCase } from '../use-cases/update-respawn.use-case';
 
-@Controller('dashboard')
+@Controller('')
 export class DashboardController {
   constructor(
     private readonly getGuildsUseCase: GetGuildsUseCase,

@@ -1,7 +1,7 @@
-import { CharacterType } from '@prisma/client';
+import { CharacterType } from '../enums/character-type.enum';
 
 export class CharacterList {
-  id: string;
+  id?: string;
   name: string;
   vocation: string;
   level: number;

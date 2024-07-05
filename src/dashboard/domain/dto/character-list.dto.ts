@@ -1,10 +1,18 @@
-import { CharacterType } from '@prisma/client';
-import { IsEnum, IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
+import { CharacterType } from '../enums/character-type.enum';
+import { CharacterListMapper } from '../mappers/character-list.mapper';
 
 export class CharacterListDTO {
   @IsOptional()
   @IsUUID()
-  id: string;
+  id?: string;
 
   @IsString()
   name: string;
@@ -12,9 +20,11 @@ export class CharacterListDTO {
   @IsString()
   vocation: string;
 
-  @IsInt()
+  @IsNumber()
   level: number;
 
   @IsEnum(CharacterType)
+  @IsOptional()
+  @Transform(({ value }) => CharacterListMapper.mapCharacterType(value))
   type: CharacterType;
 }
