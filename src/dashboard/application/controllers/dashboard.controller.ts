@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { CharacterListDTO } from '../../domain/dto/character-list.dto';
 import { RespawnDTO } from '../../domain/dto/respawn.dto';
 import { CharacterList } from '../../domain/entities/character-list.entity';
 import { CreateCharacterListUseCase } from '../use-cases/create-character-list.use-case';
@@ -45,14 +46,14 @@ export class DashboardController {
   }
 
   @Post('/character')
-  async create(@Body() data: CharacterList): Promise<CharacterList> {
+  async create(@Body() data: CharacterListDTO): Promise<CharacterList> {
     return this.createCharacterListUseCase.execute(data);
   }
 
   @Put('/character/:id')
   async update(
     @Param('id') id: string,
-    @Body() data: Partial<CharacterList>,
+    @Body() data: Partial<CharacterListDTO>,
   ): Promise<CharacterList> {
     return this.updateCharacterListUseCase.execute(id, data);
   }
