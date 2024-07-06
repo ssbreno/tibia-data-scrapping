@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CharacterList } from '../../domain/entities/character-list.entity';
-import { CharacterListRepository } from '../../domain/repository/character-list.repository';
+import { CharacterList } from '../../../domain/entities/character-list.entity';
+import { CharacterListRepository } from '../../../domain/repository/character-list.repository';
 
 @Injectable()
 export class UpdateCharacterListUseCase {

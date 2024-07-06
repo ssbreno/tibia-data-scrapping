@@ -9,7 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { FRONT_END_URL } from '../../../common/constants';
-import { GetGuildsUseCase } from '../../application/use-cases/guilds/get-guilds.use-case';
+import { GetCharacterListUseCase } from '../../application/use-cases/character/get-character-list.use-case';
 
 @WebSocketGateway({
   cors: {
@@ -18,18 +18,20 @@ import { GetGuildsUseCase } from '../../application/use-cases/guilds/get-guilds.
     credentials: true,
   },
 })
-export class GuildsGateway
+export class MonitorCharacterListGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer() server: Server;
-  private logger: Logger = new Logger('GuildsGateway');
-  constructor(private readonly getGuildsUseCase: GetGuildsUseCase) {}
+  private logger: Logger = new Logger('MonitorCharacterListGateway');
+  constructor(
+    private readonly monitorCharacterListUseCase: GetCharacterListUseCase,
+  ) {}
 
   afterInit(server: Server) {
     this.logger.log('Init');
     setInterval(async () => {
-      const guildData = await this.getGuildsUseCase.execute();
-      this.server.emit('guildData', guildData);
+      const characterData = await this.monitorCharacterListUseCase.execute();
+      this.server.emit('characterListData', characterData);
     }, 1000);
   }
 
@@ -41,9 +43,9 @@ export class GuildsGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('requestGuildData')
-  async handleRequestGuildData(client: Socket): Promise<void> {
-    const guildData = await this.getGuildsUseCase.execute();
-    client.emit('guildData', guildData);
+  @SubscribeMessage('requestCharacterListData')
+  async handleRequestCharacterListData(client: Socket): Promise<void> {
+    const characterData = await this.monitorCharacterListUseCase.execute();
+    client.emit('characterListData', characterData);
   }
 }
