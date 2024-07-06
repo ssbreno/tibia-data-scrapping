@@ -13,18 +13,18 @@ export class RespawnDTO {
 
   @IsString()
   @IsOptional()
-  name: string;
+  name?: string;
 
   @IsString()
   @IsOptional()
-  character: string;
+  character?: string;
 
   @IsBoolean()
   @IsOptional()
-  is_pt: boolean;
+  is_pt?: boolean;
 
   @IsArray()
   @IsOptional()
   @IsString({ each: true })
-  pt_members: string[];
+  pt_members?: string[];
 }

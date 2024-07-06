@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CharacterListDTO } from '../../../domain/dto/character-list.dto';
+import { CharacterRespawnDTO } from '../../../domain/interfaces/character-respawn.interface';
 import { ApiResponse } from '../../../domain/interfaces/guilds.interface';
 import { CharacterListRepository } from '../../../domain/repository/character-list.repository';
+import { formatTime } from '../../../shared/utils/format-time.utils';
 import { GetAllRespawnsUseCase } from '../respawn/get-all-respawns.use-case';
 import { GetGuildsToCharacterUseCase } from './get-guilds-to-character.use-case';
 
@@ -16,14 +17,7 @@ export class GetCharacterListUseCase {
     private readonly getRespawnsUseCase: GetAllRespawnsUseCase,
   ) {}
 
-  private formatTime(seconds: number): string {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  }
-
-  async execute(): Promise<{ character: CharacterListDTO; respawn: any }[]> {
+  async execute(): Promise<CharacterRespawnDTO[]> {
     const characterList = await this.characterListRepository.findAll();
     const guildData: ApiResponse =
       await this.getGuildsToCharacterUseCase.execute();
@@ -35,7 +29,8 @@ export class GetCharacterListUseCase {
 
     return onlineMembers.map((member) => {
       const character = characterList.find((char) => char.name === member.name);
-      const respawn = respawns.find((resp) => resp.character === member.name);
+      const respawn =
+        respawns.find((resp) => resp.character === member.name) || null;
 
       if (this.membersTimers[member.name]) {
         if (member.status === 'online') {
@@ -56,7 +51,7 @@ export class GetCharacterListUseCase {
         totalOnline: guildData.guild.players_online,
         character: {
           ...character,
-          onlineTimer: this.formatTime(this.membersTimers[member.name].timer),
+          onlineTimer: formatTime(this.membersTimers[member.name].timer),
         },
         respawn,
       };
