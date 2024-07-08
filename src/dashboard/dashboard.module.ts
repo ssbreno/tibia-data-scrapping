@@ -12,7 +12,6 @@ import { CreateRespawnUseCase } from './application/use-cases/respawn/create-res
 import { GetAllRespawnsUseCase } from './application/use-cases/respawn/get-all-respawns.use-case';
 import { UpdateRespawnUseCase } from './application/use-cases/respawn/update-respawn.use-case';
 import { DatabaseModule } from './infraestructure/database/database.module';
-import { GuildsGateway } from './infraestructure/socket/guilds.gateway';
 import { MonitorCharacterListGateway } from './infraestructure/socket/monitor-character-list.gateway';
 
 @Module({
@@ -27,7 +26,6 @@ import { MonitorCharacterListGateway } from './infraestructure/socket/monitor-ch
     CreateRespawnUseCase,
     UpdateRespawnUseCase,
     GetAllRespawnsUseCase,
-    GuildsGateway,
     MonitorCharacterListGateway,
     CreateCharacterListUseCase,
     UpdateCharacterListUseCase,

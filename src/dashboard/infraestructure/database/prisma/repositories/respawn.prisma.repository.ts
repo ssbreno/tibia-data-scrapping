@@ -17,7 +17,7 @@ export class PrismaRespawnRepository implements RespawnRepository {
     const createdRespawn = await this.prisma.respawn.create({
       data: {
         id: respawn.id,
-        name: respawn.name,
+        name: respawn.name ?? null,
         character: respawn.character,
         is_pt: respawn.is_pt,
         pt_members: respawn.pt_members,
@@ -43,6 +43,7 @@ export class PrismaRespawnRepository implements RespawnRepository {
       const newRespawn = await this.prisma.respawn.create({
         data: {
           ...data,
+          name: data.name ?? null,
           character: name,
         },
       });
