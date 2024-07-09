@@ -27,7 +27,7 @@ export class GetCharacterListUseCase {
       characterList.some((character) => character.name === member.name),
     );
 
-    return onlineMembers.map((member) => {
+    const charactersRespawn = onlineMembers.map((member) => {
       const character = characterList.find((char) => char.name === member.name);
       const respawn =
         respawns.find((resp) => resp.character === member.name) || null;
@@ -56,5 +56,28 @@ export class GetCharacterListUseCase {
         respawn,
       };
     });
+
+    const groupedByVocation: { [vocation: string]: CharacterRespawnDTO[] } = {};
+
+    charactersRespawn.forEach((charRespawn) => {
+      const vocation = charRespawn.character.vocation;
+      if (!groupedByVocation[vocation]) {
+        groupedByVocation[vocation] = [];
+      }
+      groupedByVocation[vocation].push(charRespawn);
+    });
+
+    Object.keys(groupedByVocation).forEach((vocation) => {
+      groupedByVocation[vocation].sort(
+        (a, b) => b.character.level - a.character.level,
+      );
+    });
+
+    const sortedCharacters: CharacterRespawnDTO[] = [];
+    Object.values(groupedByVocation).forEach((group) => {
+      sortedCharacters.push(...group);
+    });
+
+    return sortedCharacters;
   }
 }
