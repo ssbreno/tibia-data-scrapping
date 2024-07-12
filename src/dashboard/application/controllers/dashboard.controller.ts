@@ -1,10 +1,9 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { CharacterListDTO } from '../../domain/dto/character-list.dto';
+import { CharacterDTO } from '../../domain/dto/character.dto';
 import { RespawnDTO } from '../../domain/dto/respawn.dto';
-import { CharacterList } from '../../domain/entities/character-list.entity';
-import { CreateCharacterListUseCase } from '../use-cases/character/create-character-list.use-case';
-import { GetCharacterListUseCase } from '../use-cases/character/get-character-list.use-case';
-import { UpdateCharacterListUseCase } from '../use-cases/character/update-character-list.use-case';
+import { Character } from '../../domain/entities/character-list.entity';
+import { GetCharacterUseCase } from '../use-cases/character/get-character-list.use-case';
+import { UpdateCharacterUseCase } from '../use-cases/character/update-character-list.use-case';
 import { GetGuildsUseCase } from '../use-cases/guilds/get-guilds.use-case';
 import { CreateRespawnUseCase } from '../use-cases/respawn/create-respawn.use-case';
 import { UpdateRespawnUseCase } from '../use-cases/respawn/update-respawn.use-case';
@@ -15,9 +14,8 @@ export class DashboardController {
     private readonly getGuildsUseCase: GetGuildsUseCase,
     private readonly createRespawnUseCase: CreateRespawnUseCase,
     private readonly updateRespawnUseCase: UpdateRespawnUseCase,
-    private readonly createCharacterListUseCase: CreateCharacterListUseCase,
-    private readonly updateCharacterListUseCase: UpdateCharacterListUseCase,
-    private readonly getCharacterListUseCase: GetCharacterListUseCase,
+    private readonly updateCharacterUseCase: UpdateCharacterUseCase,
+    private readonly getCharacterUseCase: GetCharacterUseCase,
   ) {}
 
   @Get('/guilds')
@@ -38,21 +36,16 @@ export class DashboardController {
     return this.updateRespawnUseCase.execute(name, data);
   }
 
-  @Post('/character')
-  async create(@Body() data: CharacterListDTO): Promise<CharacterList> {
-    return this.createCharacterListUseCase.execute(data);
-  }
-
-  @Put('/character/:id')
+  @Put('/character/:name')
   async update(
-    @Param('id') id: string,
-    @Body() data: Partial<CharacterListDTO>,
-  ): Promise<CharacterList> {
-    return this.updateCharacterListUseCase.execute(id, data);
+    @Param('name') name: string,
+    @Body() data: Omit<CharacterDTO, 'id'>,
+  ): Promise<any> {
+    return this.updateCharacterUseCase.execute(name, data);
   }
 
   @Get('/character/all')
-  async findAll(): Promise<{ character: CharacterList; respawn: any }[]> {
-    return this.getCharacterListUseCase.execute();
+  async findAll(): Promise<{ character: Character; respawn: any }[]> {
+    return this.getCharacterUseCase.execute();
   }
 }

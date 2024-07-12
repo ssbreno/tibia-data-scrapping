@@ -7,9 +7,9 @@ import {
   IsUUID,
 } from 'class-validator';
 import { CharacterType } from '../enums/character-type.enum';
-import { CharacterListMapper } from '../mappers/character-list.mapper';
+import { CharacterMapper } from '../mappers/character.mapper';
 
-export class CharacterListDTO {
+export class CharacterDTO {
   @IsOptional()
   @IsUUID()
   id?: string;
@@ -25,6 +25,6 @@ export class CharacterListDTO {
 
   @IsEnum(CharacterType)
   @IsOptional()
-  @Transform(({ value }) => CharacterListMapper.mapCharacterType(value))
+  @Transform(({ value }) => CharacterMapper.mapCharacterType(value))
   type: CharacterType;
 }

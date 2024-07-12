@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Respawn {
+model respawn {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name       String?
   character  String?  @unique
@@ -24,18 +24,35 @@ model Respawn {
   @@index([character])
 }
 
-model CharacterList {
+model character {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name       String
+  name       String   @unique
   vocation   String
   level      Int
-  type       CharacterType
+  type       characterType
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@index([name])
 }
 
-enum CharacterType {
+model respawn_list {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String   @unique
+  code       String
+  pos_x      Int
+  pos_y      Int
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([name])
+}
+
+enum characterType {
   MAKER
   BOMBA
   MAIN
+  FRACOKS
 }
+
+

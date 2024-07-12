@@ -1,17 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CharacterList } from '../../../domain/entities/character-list.entity';
-import { CharacterListRepository } from '../../../domain/repository/character-list.repository';
+import { Character } from '../../../domain/entities/character-list.entity';
+import { CharacterRepository } from '../../../domain/repository/character-list.repository';
 
 @Injectable()
-export class UpdateCharacterListUseCase {
-  constructor(
-    private readonly characterListRepository: CharacterListRepository,
-  ) {}
+export class UpdateCharacterUseCase {
+  constructor(private readonly characterRepository: CharacterRepository) {}
 
-  async execute(
-    id: string,
-    data: Partial<CharacterList>,
-  ): Promise<CharacterList> {
-    return this.characterListRepository.update(id, data);
+  async execute(name: string, data: Omit<Character, 'id'>): Promise<any> {
+    return this.characterRepository.update(name, data);
   }
 }

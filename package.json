@@ -20,8 +20,6 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --forceExit --detectOpenHandles --config ./test/jest-e2e.json",
     "doc": "npx @compodoc/compodoc -p tsconfig.json",
     "doc:serve": "pnpm run doc && npx @compodoc/compodoc -s",
     "precommit": "lint-staged && pnpm run lint",

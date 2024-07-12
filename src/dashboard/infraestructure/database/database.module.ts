@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CharacterListRepository } from '../../domain/repository/character-list.repository';
+import { CharacterRepository } from '../../domain/repository/character-list.repository';
 import { RespawnRepository } from '../../domain/repository/respawn.repository';
 import { PrismaService } from './prisma/prisma.service';
-import { PrismaCharacterListRepository } from './prisma/repositories/character-list.prisma.repository';
+import { PrismaCharacterRepository } from './prisma/repositories/character.prisma.repository';
 import { PrismaRespawnRepository } from './prisma/repositories/respawn.prisma.repository';
 
 @Module({
@@ -13,8 +13,8 @@ import { PrismaRespawnRepository } from './prisma/repositories/respawn.prisma.re
       useClass: PrismaRespawnRepository,
     },
     {
-      provide: CharacterListRepository,
-      useClass: PrismaCharacterListRepository,
+      provide: CharacterRepository,
+      useClass: PrismaCharacterRepository,
     },
   ],
   exports: [
@@ -24,8 +24,8 @@ import { PrismaRespawnRepository } from './prisma/repositories/respawn.prisma.re
       useClass: PrismaRespawnRepository,
     },
     {
-      provide: CharacterListRepository,
-      useClass: PrismaCharacterListRepository,
+      provide: CharacterRepository,
+      useClass: PrismaCharacterRepository,
     },
   ],
 })

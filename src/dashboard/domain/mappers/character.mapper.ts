@@ -1,7 +1,7 @@
-import { CharacterType as PrismaCharacterType } from '@prisma/client';
+import { characterType as PrismaCharacterType } from '@prisma/client';
 import { CharacterType } from '../enums/character-type.enum';
 
-export class CharacterListMapper {
+export class CharacterMapper {
   public static mapCharacterType(type: any): CharacterType {
     if (typeof type === 'string') {
       switch (type) {

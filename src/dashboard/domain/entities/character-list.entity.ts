@@ -1,6 +1,6 @@
 import { CharacterType } from '../enums/character-type.enum';
 
-export class CharacterList {
+export class Character {
   id?: string;
   name: string;
   vocation: string;

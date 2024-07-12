@@ -1,34 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CharacterRespawnDTO } from '../../../domain/interfaces/character-respawn.interface';
 import { ApiResponse } from '../../../domain/interfaces/guilds.interface';
-import { CharacterListRepository } from '../../../domain/repository/character-list.repository';
+import { CharacterRepository } from '../../../domain/repository/character-list.repository';
 import { formatTime } from '../../../shared/utils/format-time.utils';
 import { GetAllRespawnsUseCase } from '../respawn/get-all-respawns.use-case';
 import { GetGuildsToCharacterUseCase } from './get-guilds-to-character.use-case';
 
 @Injectable()
-export class GetCharacterListUseCase {
+export class GetCharacterUseCase {
   private membersTimers: { [name: string]: { timer: number; status: string } } =
     {};
 
   constructor(
-    private readonly characterListRepository: CharacterListRepository,
+    private readonly characterRepository: CharacterRepository,
     private readonly getGuildsToCharacterUseCase: GetGuildsToCharacterUseCase,
     private readonly getRespawnsUseCase: GetAllRespawnsUseCase,
   ) {}
 
   async execute(): Promise<CharacterRespawnDTO[]> {
-    const characterList = await this.characterListRepository.findAll();
+    const getAllCharacters = await this.characterRepository.findAll();
     const guildData: ApiResponse =
       await this.getGuildsToCharacterUseCase.execute();
     const respawns = await this.getRespawnsUseCase.execute();
 
     const onlineMembers = guildData.guild.members.filter((member) =>
-      characterList.some((character) => character.name === member.name),
+      getAllCharacters.some((character) => character.name === member.name),
     );
 
     const charactersRespawn = onlineMembers.map((member) => {
-      const character = characterList.find((char) => char.name === member.name);
+      const character = getAllCharacters.find(
+        (char) => char.name === member.name,
+      );
       const respawn =
         respawns.find((resp) => resp.character === member.name) || null;
 

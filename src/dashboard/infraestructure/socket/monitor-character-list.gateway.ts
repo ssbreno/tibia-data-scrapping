@@ -9,7 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { FRONT_END_URL } from '../../../common/constants';
-import { GetCharacterListUseCase } from '../../application/use-cases/character/get-character-list.use-case';
+import { GetCharacterUseCase } from '../../application/use-cases/character/get-character-list.use-case';
 
 @WebSocketGateway({
   cors: {
@@ -18,21 +18,19 @@ import { GetCharacterListUseCase } from '../../application/use-cases/character/g
     credentials: true,
   },
 })
-export class MonitorCharacterListGateway
+export class MonitorCharacterGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer() server: Server;
-  private logger: Logger = new Logger('MonitorCharacterListGateway');
-  constructor(
-    private readonly monitorCharacterListUseCase: GetCharacterListUseCase,
-  ) {}
+  private logger: Logger = new Logger('MonitorCharacterGateway');
+  constructor(private readonly monitorCharacterUseCase: GetCharacterUseCase) {}
 
   afterInit(server: Server) {
     this.logger.log('Init');
     setInterval(async () => {
-      const characterData = await this.monitorCharacterListUseCase.execute();
-      this.server.emit('characterListData', characterData);
-    }, 1000);
+      const characterData = await this.monitorCharacterUseCase.execute();
+      this.server.emit('characterData', characterData);
+    }, 3000);
   }
 
   handleConnection(client: Socket, ...args: any[]) {
@@ -43,9 +41,9 @@ export class MonitorCharacterListGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('requestCharacterListData')
-  async handleRequestCharacterListData(client: Socket): Promise<void> {
-    const characterData = await this.monitorCharacterListUseCase.execute();
-    client.emit('characterListData', characterData);
+  @SubscribeMessage('requestCharacterData')
+  async handleRequestCharacterData(client: Socket): Promise<void> {
+    const characterData = await this.monitorCharacterUseCase.execute();
+    client.emit('characterData', characterData);
   }
 }

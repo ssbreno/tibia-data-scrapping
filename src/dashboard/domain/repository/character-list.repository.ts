@@ -1,11 +1,8 @@
-import { CharacterList } from '../entities/character-list.entity';
+import { Character } from '../entities/character-list.entity';
 
-export abstract class CharacterListRepository {
-  abstract create(data: CharacterList): Promise<CharacterList>;
-  abstract update(
-    id: string,
-    data: Partial<CharacterList>,
-  ): Promise<CharacterList>;
-  abstract findAll(): Promise<CharacterList[]>;
-  abstract findById(id: string): Promise<CharacterList>;
+export abstract class CharacterRepository {
+  abstract create(data: Character): Promise<Character>;
+  abstract update(name: string, data: Omit<Character, 'id'>): Promise<void>;
+  abstract findAll(): Promise<Character[]>;
+  abstract findById(id: string): Promise<Character>;
 }
