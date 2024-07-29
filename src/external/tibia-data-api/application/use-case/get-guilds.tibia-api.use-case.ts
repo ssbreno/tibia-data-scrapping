@@ -6,7 +6,7 @@ import { ApiResponse } from '../../../../dashboard/domain/interfaces/guilds.inte
 @Injectable()
 export class GetGuildsTibiaDataUseCase {
   async getGuilds(): Promise<ApiResponse> {
-    const url = `${TIBIA_DATA_API}/v4/guild/Tornabra Encore`;
+    const url = `${TIBIA_DATA_API}/v4/guild/Unebro`;
 
     try {
       const headers = {
